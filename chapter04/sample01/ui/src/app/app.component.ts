@@ -14,16 +14,16 @@ import { HttpClient } from '@angular/common/http';
   styles: []
 })
 
-export class AppComponent {  
+export class AppComponent {
   books: Book[];
 
   constructor(private http: HttpClient) {
   }
 
-  loadBooks(){  
+  loadBooks() {
      this.http
       .get<Book[]>('http://localhost:8080/books')
-      .subscribe(data => {this.books = data});
+      .subscribe(data => {this.books = data; });
   }
 }
 

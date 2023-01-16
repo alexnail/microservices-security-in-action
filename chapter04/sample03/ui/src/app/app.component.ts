@@ -11,10 +11,9 @@ import { HttpClient } from '@angular/common/http';
       <button (click)='logout()'>Log out</button>
       <button (click)='refresh()'>Refresh</button>
     </p>
-    
-    <span *ngIf="isLoggedIn()"><div *ngFor=\"let book of books\">
-      {{book.name}}
-    </div></span>
+    <span *ngIf="isLoggedIn()">
+      <div *ngFor=\"let book of books\">{{book.name}}</div>
+    </span>
   `,
   styles: []
 })
@@ -23,11 +22,11 @@ export class AppComponent {
   username = '';
   books: Book[];
 
-  get token() { 
+  get token() {
     this.oauthService.setStorage(sessionStorage);
-    var token = this.oauthService.getAccessToken();
+    const token = this.oauthService.getAccessToken();
     console.log('Access Token = ' + token);
-    return token; 
+    return token;
   }
   get claims() { return this.oauthService.getIdentityClaims(); }
 
@@ -58,29 +57,24 @@ export class AppComponent {
     oauthService.setupAutomaticSilentRefresh();
   }
 
-  login() { 
+  login() {
     this.oauthService.initCodeFlow();
   }
-  logout() { 
-    this.oauthService.logOut(); 
+  logout() {
+    this.oauthService.logOut();
   }
-  refresh() { 
-    this.oauthService.silentRefresh(); 
+  refresh() {
+    this.oauthService.silentRefresh();
   }
 
-  isLoggedIn(){
-    if (this.oauthService.getAccessToken() === null){
-       return false;
-    }
-    return true;
-  } 
+  isLoggedIn() {
+    return this.oauthService.getAccessToken() !== null;
+  }
 
-  loadBooks(){
-     
+  loadBooks() {
      this.http
-      .get<Book[]>('http://localhost:8080/books', 
-        {headers: {'Authorization': 'Bearer '+ this.oauthService.getAccessToken()}})
-      .subscribe(data => {this.books = data});
+      .get<Book[]>('http://localhost:8080/books', {headers: {Authorization: 'Bearer ' + this.oauthService.getAccessToken()}})
+      .subscribe(data => {this.books = data; });
   }
 }
 
